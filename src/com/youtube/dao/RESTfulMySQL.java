@@ -18,6 +18,7 @@ public class RESTfulMySQL {
 				context = new InitialContext();
 			
 			dataSourceMySQL = (DataSource) context.lookup("RESTfulMySQL");
+			//dataSourceMySQL = (DataSource) context.lookup("RESTful_pc_parts");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
