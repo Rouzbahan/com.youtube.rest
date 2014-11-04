@@ -1,5 +1,7 @@
 package com.youtube.dao;
 
+import java.sql.Connection;
+
 import javax.naming.*;
 import javax.sql.*;
 
@@ -27,4 +29,17 @@ public class RESTfulMySQL {
 		return dataSourceMySQL;
 	}
 	
+	protected static Connection MySQLPcPartsConnection() {
+		Connection conn = null;
+		
+		try {
+			conn = MySQLConn().getConnection();
+			return conn;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return conn;
+	}
 }
