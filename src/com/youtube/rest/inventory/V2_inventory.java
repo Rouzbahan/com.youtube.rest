@@ -70,15 +70,44 @@ public class V2_inventory {
 
 		return Response.ok(string).build();
 	}
-	
-	/*@GET
+
+	@GET
+	@Path("/{brand}/{item_number}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response returnErrorOnBrand() throws Exception {
-		return Response
-				.status(400)
-				.entity("Error: Please specify the brand for this search")
-				.build();
+	public Response returnSpecificBrandItem(
+			@PathParam("brand") String brand,
+			@PathParam("item_number") int item_number) 
+					throws Exception {
+		String string = null;
+		JSONArray jsonArray = new JSONArray();
+
+		try {
+			if (brand == null)
+				return Response
+						.status(400)
+						.entity("Error: Please specify the brand for this search")
+						.build();
+
+			SchemaRESTfulMySQL dao = new SchemaRESTfulMySQL();
+			jsonArray = dao.queryReturnBrandItemNumber(brand, item_number);
+			string = jsonArray.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(500)
+					.entity("Server was not able to process your request")
+					.build();
+		}
+
+		return Response.ok(string).build();
 	}
-	*/
+
+	/*
+	 * @GET
+	 * 
+	 * @Produces(MediaType.APPLICATION_JSON) public Response
+	 * returnErrorOnBrand() throws Exception { return Response .status(400)
+	 * .entity("Error: Please specify the brand for this search") .build(); }
+	 */
 
 }
