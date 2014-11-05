@@ -60,8 +60,8 @@ public class SchemaRESTfulMySQL extends RESTfulMySQL {
 		try {
 			conn = MySQLPcPartsConnection();
 			query = conn
-					.prepareStatement("select PC_PARTS_PK, PC_PARTS_TITLE, PC_PARTS_CODE, PC_PARTS_MAKER, " +
-							"PC_PARTS_AVAIL, PC_PARTS_DESC from PC_PARTS "
+					.prepareStatement("select PC_PARTS_PK, PC_PARTS_TITLE, PC_PARTS_CODE, PC_PARTS_MAKER, "
+							+ "PC_PARTS_AVAIL, PC_PARTS_DESC from PC_PARTS "
 							+ "where UPPER(PC_PARTS_MAKER) = ? and PC_PARTS_CODE = ?");
 
 			/*
@@ -86,6 +86,50 @@ public class SchemaRESTfulMySQL extends RESTfulMySQL {
 		}
 
 		return json;
+	}
+
+	public int insertIntoPC_PARTS(String PC_PARTS_TITLE, String PC_PARTS_CODE,
+			String PC_PARTS_MAKER, String PC_PARTS_AVAIL, String PC_PARTS_DESC)
+			throws Exception {
+
+		PreparedStatement query = null;
+		Connection conn = null;
+
+		try {
+			/*
+			 * If this was a real application, you should do data validation
+			 * here before starting to insert data into the database.
+			 * 
+			 * Important: The primary key on PC_PARTS table will auto increment.
+			 * That means the PC_PARTS_PK column does not need to be apart of
+			 * the SQL insert query below.
+			 */
+			conn = MySQLPcPartsConnection();
+			query = conn
+					.prepareStatement("insert into PC_PARTS (PC_PARTS_TITLE, PC_PARTS_CODE, PC_PARTS_MAKER, PC_PARTS_AVAIL, PC_PARTS_DESC) "
+							+ "VALUES ( ?, ?, ?, ?, ? ) ");
+
+			query.setString(1, PC_PARTS_TITLE);
+			query.setString(2, PC_PARTS_CODE);
+			query.setString(3, PC_PARTS_MAKER);
+
+			// PC_PARTS_AVAIL is a number column, so we need to convert the
+			// String into a integer
+			int avilInt = Integer.parseInt(PC_PARTS_AVAIL);
+			query.setInt(4, avilInt);
+
+			query.setString(5, PC_PARTS_DESC);
+			query.executeUpdate(); // note the new command for insert statement
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 500; // if a error occurs, return a 500
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
+
+		return 200;
 	}
 
 }
