@@ -132,4 +132,63 @@ public class SchemaRESTfulMySQL extends RESTfulMySQL {
 		return 200;
 	}
 
+	public int updatePC_PARTS(int pk, int avail) throws Exception {
+
+		PreparedStatement query = null;
+		Connection conn = null;
+
+		try {
+			/*
+			 * If this was a real application, you should do data validation
+			 * here before updating data.
+			 */
+
+			conn = MySQLPcPartsConnection();
+			query = conn.prepareStatement("update PC_PARTS "
+					+ "set PC_PARTS_AVAIL = ? " + "where PC_PARTS_PK = ? ");
+
+			query.setInt(1, avail);
+			query.setInt(2, pk);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 500;
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
+
+		return 200;
+	}
+
+	public int deletePC_PARTS(int pk) throws Exception {
+
+		PreparedStatement query = null;
+		Connection conn = null;
+
+		try {
+			/*
+			 * If this was a real application, you should do data validation
+			 * here before deleting data.
+			 */
+
+			conn = MySQLPcPartsConnection();
+			query = conn.prepareStatement("delete from PC_PARTS "
+					+ "where PC_PARTS_PK = ? ");
+
+			query.setInt(1, pk);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 500;
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
+
+		return 200;
+	}
+
 }
